@@ -1,0 +1,7 @@
+*.env
+*.yaml
+*.json
+*.log
+*.parquet
+*.bz2
+*.pyc

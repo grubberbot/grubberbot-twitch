@@ -1,0 +1,3 @@
+name: grubberbot-twitch
+dependencies:
+    - python=3.8

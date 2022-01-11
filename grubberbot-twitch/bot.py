@@ -1,4 +1,5 @@
 import os
+import string
 
 import pyttsx3
 import yaml
@@ -27,13 +28,17 @@ class TTS:
         self.engine = self.build_engine()
 
         self.user_types = {
-            "super_user": {
+            "mods": {
                 "voice": -2,
                 "volume": 1.0,
             },
+            "super_user": {
+                "voice": -2,
+                "volume": 0.75,
+            },
             "user": {
                 "voice": -1,
-                "volume": 0.25,
+                "volume": 0.33,
             },
         }
 
@@ -64,7 +69,8 @@ class TTS:
         # Actually speak now
         prefix = "!tts "
         if message.lower().startswith(prefix):
-            text = message.lstrip(prefix)
+            text = message[len(prefix) :]
+            text = "".join([t for t in text if t in string.printable])
             with open(SCREEN_TEXT_PATH, "w") as f:
                 print(f"{nickname}: {text}", file=f)
             self.engine.say(text)
@@ -73,7 +79,6 @@ class TTS:
 
 def main():
     tts = TTS()
-    e = None
 
     credentials = load_yaml(CREDENTIALS_PATH)
     with Observer("username", credentials["OAUTH"]) as observer:
@@ -90,7 +95,6 @@ def main():
                 print(e)
                 observer.leave_channel(CHANNEL)
                 break
-    raise e
 
 
 if __name__ == "__main__":
